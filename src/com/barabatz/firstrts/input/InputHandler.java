@@ -1,8 +1,11 @@
 package com.barabatz.firstrts.input;
 
+import com.barabatz.firstrts.texture.SquareEntity;
 import com.barabatz.firstrts.texture.TextureHandler;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,14 +15,47 @@ import org.lwjgl.input.Mouse;
  */
 public class InputHandler {
 
-    TextureHandler textureHandler;
+    List<SquareEntity> squareEntities;
 
-    public InputHandler(TextureHandler textureHandler) {
-        this.textureHandler = textureHandler;
+    public InputHandler(List<SquareEntity> squareEntities) {
+        this.squareEntities = squareEntities;
+    }
+
+    private void moveItem(SquareEntity squareEntity){
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
+            if (squareEntity!= null){
+                squareEntity.setItemInMiddle();
+            }
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+            if (squareEntity!= null) {
+                squareEntity.moveRight();
+            }
+        }
+
+        if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+            if (squareEntity!= null) {
+                squareEntity.moveLeft();
+            }
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+            if (squareEntity!= null) {
+                squareEntity.moveUp();
+            }
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+            if (squareEntity!= null) {
+                squareEntity.moveDown();
+            }
+        }
     }
 
     public void pollInput() {
-
+        for (SquareEntity squareEntity : squareEntities) {
+            moveItem(squareEntity);
+        }
         //LEFT MOUSE button
         if (Mouse.isButtonDown(0)){
             int x = Mouse.getX();
@@ -38,36 +74,6 @@ public class InputHandler {
             int x = Mouse.getX();
             int y = Mouse.getY();
             System.out.println("MIDDLE MOUSE DOWN @ X:" + x + " Y: " + y);
-        }
-
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-            if (textureHandler!= null) {
-                textureHandler.setItemInMiddle();
-            }
-            System.out.println("SPACE KEY IS DOWN");
-        }
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-            if (textureHandler!= null) {
-                textureHandler.moveRight();
-            }
-        }
-
-        if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-            if (textureHandler!= null) {
-                textureHandler.moveLeft();
-            }
-        }
-        if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-            if (textureHandler!= null) {
-                textureHandler.moveUp();
-            }
-        }
-        if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-            if (textureHandler!= null) {
-                textureHandler.moveDown();
-            }
         }
 
         while (Keyboard.next()) {

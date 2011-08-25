@@ -1,10 +1,14 @@
 package com.barabatz.firstrts;
 
 import com.barabatz.firstrts.input.InputHandler;
+import com.barabatz.firstrts.texture.SquareEntity;
 import com.barabatz.firstrts.texture.TextureHandler;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,6 +22,7 @@ public class GameStarter {
 
     private InputHandler inputHandler;
     private TextureHandler textureHandler;
+    List<SquareEntity> squareEntities;
 
 
     public GameStarter(){
@@ -29,7 +34,10 @@ public class GameStarter {
             Display.setDisplayMode(new DisplayMode(WINDOW_WIDTH,WINDOW_HEIGHT));
             Display.create();
             textureHandler = new TextureHandler();
-            inputHandler = new InputHandler(textureHandler);
+            SquareEntity squareEntity = new SquareEntity();
+            squareEntities = new ArrayList<SquareEntity>();
+            squareEntities.add(squareEntity);
+            inputHandler = new InputHandler(squareEntities);
         } catch (LWJGLException e) {
             e.printStackTrace();
             System.exit(0);
@@ -37,7 +45,7 @@ public class GameStarter {
 
         while (!Display.isCloseRequested()) {
             inputHandler.pollInput();
-            textureHandler.draw();
+            textureHandler.draw(squareEntities);
             Display.update();
         }
 
