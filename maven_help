@@ -1,0 +1,5 @@
+#To create app
+mvn package appassembler:assemble
+
+#To run app
+./target/appassembler/bin/app.bat
