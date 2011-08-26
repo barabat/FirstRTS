@@ -4,6 +4,7 @@ import com.barabatz.firstrts.input.InputHandler;
 import com.barabatz.firstrts.texture.SquareEntity;
 import com.barabatz.firstrts.texture.TextureHandler;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
@@ -22,6 +23,15 @@ public class GameStarter {
     private InputHandler inputHandler;
     private TextureHandler textureHandler;
     List<SquareEntity> squareEntities;
+    
+    /** time at last frame */
+    long lastFrame;
+
+    /** frames per second */
+    int fps;
+    /** last fps time */
+    long lastFPS;
+
 
 
     public GameStarter(){
@@ -29,31 +39,81 @@ public class GameStarter {
     }
 
     private void start() {
-        try{
-            Display.setDisplayMode(new DisplayMode(WINDOW_WIDTH,WINDOW_HEIGHT));
-            Display.create();
-            textureHandler = new TextureHandler();
-            SquareEntity squareEntity = new SquareEntity();
-            squareEntities = new ArrayList<SquareEntity>();
-            squareEntities.add(squareEntity);
-            inputHandler = new InputHandler(squareEntities);
-        } catch (LWJGLException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
-
+        setupDisplay();
+        getDelta(); //call once before loop to initialize lastFrame
+        lastFPS = getTime(); //call before loop to initialize fps timer
         while (!Display.isCloseRequested()) {
-            inputHandler.pollInput();
-            textureHandler.draw(squareEntities);
+            int delta = getDelta();
+            update(delta);
             Display.update();
         }
 
         Display.destroy();
     }
 
+    private void update(int delta){
+        inputHandler.pollInput();
+        textureHandler.draw(delta, squareEntities);
+        updateFPS();
+    }
+
+    private void setupDisplay() {
+        try{
+            Display.setDisplayMode(new DisplayMode(WINDOW_WIDTH, WINDOW_HEIGHT));
+            Display.create();
+            initHandlers();
+        } catch (LWJGLException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+    }
+
+    private void initHandlers() {
+        textureHandler = new TextureHandler();
+        SquareEntity squareEntity = new SquareEntity();
+        squareEntities = new ArrayList<SquareEntity>();
+        squareEntities.add(squareEntity);
+        inputHandler = new InputHandler(squareEntities);
+    }
+
+    /** 
+	 * Calculate how many milliseconds have passed
+	 * since last frame.
+	 *
+	 * @return milliseconds passed since last frame
+	 */
+	public int getDelta() {
+	    long time = getTime();
+	    int delta = (int) (time - lastFrame);
+	    lastFrame = time;
+
+	    return delta;
+	}
+
+    /**
+	 * Get the accurate system time
+	 *
+	 * @return The system time in milliseconds
+	 */
+	public long getTime() {
+	    return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+	}
+
     public static void main(String[] args) {
         GameStarter gameStarter = new GameStarter();
         gameStarter.start();
+    }
+    
+    /**
+     * Calculate the FPS and set it in the title bar
+     */
+    public void updateFPS() {
+        if (getTime() - lastFPS > 1000) {
+            Display.setTitle("FPS: " + fps);
+            fps = 0;
+            lastFPS += 1000;
+        }
+        fps++;
     }
 
 }

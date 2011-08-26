@@ -22,32 +22,29 @@ public class InputHandler {
 
     private void moveItem(SquareEntity squareEntity){
 
+        if (squareEntity==null) return;
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-            if (squareEntity!= null){
-                squareEntity.setItemInMiddle();
-            }
+            squareEntity.setItemInMiddle();
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-            if (squareEntity!= null) {
-                squareEntity.moveRight();
-            }
+            squareEntity.moveRight();
         }
 
         if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
-            if (squareEntity!= null) {
-                squareEntity.moveLeft();
-            }
+            squareEntity.moveLeft();
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
-            if (squareEntity!= null) {
-                squareEntity.moveUp();
-            }
+            squareEntity.moveUp();
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-            if (squareEntity!= null) {
-                squareEntity.moveDown();
-            }
+            squareEntity.moveDown();
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_Q)){
+            squareEntity.rotateLeft();
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_E)){
+            squareEntity.rotateRight();
         }
     }
 

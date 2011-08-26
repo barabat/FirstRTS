@@ -11,9 +11,16 @@ import org.lwjgl.opengl.*;
 public class SquareEntity {
     private int x = 100;
     private int y = 100;
-    private int size = 200;
+    private int size = 50;
+    private float rotation = 0f;
+    private int delta;
+    private float rotationSpeed = 0f;
 
-    public void draw(){
+    public void draw(int delta){
+        this.delta = delta;
+        setRotation();
+        System.out.println("X: " +x+ " Rot: " + rotation);
+        keepOnScreen();
         // Clear the screen and the depth buffer
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
@@ -22,14 +29,23 @@ public class SquareEntity {
         GL11.glColor3f(calculateRColor(), calculateGColor(), B);
 
         //Draw a quad
+        GL11.glPushMatrix();
+        GL11.glTranslatef(x, y, 0);
+        GL11.glRotatef(rotation, 0f, 0f, 1f);
+        GL11.glTranslatef(-x, -y, 0);
+
         GL11.glBegin(GL11.GL_QUADS);
-
-
-        GL11.glVertex2f(x,y);
-        GL11.glVertex2f(x+size, y);
+        GL11.glVertex2f(x-size,y-size);
+        GL11.glVertex2f(x+size, y-size);
         GL11.glVertex2f(x+size, y+size);
-        GL11.glVertex2f(x, y+size);
+        GL11.glVertex2f(x-size, y+size);
+
         GL11.glEnd();
+        GL11.glPopMatrix();
+    }
+
+    private void setRotation() {
+        rotation += rotationSpeed * delta;
     }
 
     private float calculateRColor(){
@@ -62,6 +78,25 @@ public class SquareEntity {
 
     public void moveDown() {
         y++;
+    }
+
+    public void rotateLeft() {
+        rotationSpeed = -0.15f;
+        rotation -= 0.35f * delta;
+    }
+
+    public void rotateRight() {
+        rotationSpeed = +0.15f;
+        rotation  += 0.35f * delta;
+    }
+
+    private void keepOnScreen(){
+        if (x < 0) x=GameStarter.WINDOW_WIDTH;
+        if (x > GameStarter.WINDOW_WIDTH) x = 0;
+        if (y < 0) y=GameStarter.WINDOW_HEIGHT;
+        if (y > GameStarter.WINDOW_HEIGHT) y = 0;
+        if (rotation<0f) rotation = 360f+rotation;
+        if (rotation>360f) rotation = rotation - 360f;
     }
 
     public void setItemInMiddle() {

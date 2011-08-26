@@ -19,9 +19,9 @@ public class TextureHandler {
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
     }
 
-    public void draw(List<SquareEntity> squareEntities) {
+    public void draw(int delta, List<SquareEntity> squareEntities) {
         for (SquareEntity squareEntity : squareEntities){
-            squareEntity.draw();
+            squareEntity.draw(delta);
         }
     }
 
