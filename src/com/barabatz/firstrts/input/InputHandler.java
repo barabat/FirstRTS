@@ -1,7 +1,6 @@
 package com.barabatz.firstrts.input;
 
 import com.barabatz.firstrts.texture.SquareEntity;
-import com.barabatz.firstrts.texture.TextureHandler;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 

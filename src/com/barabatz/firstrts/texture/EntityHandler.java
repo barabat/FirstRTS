@@ -9,14 +9,11 @@ import java.util.List;
  * Date: 26.08.11
  * Time: 00:42
  */
-public class TextureHandler {
+public class EntityHandler {
 
 
-    public TextureHandler() {
-        GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glOrtho(0, GameStarter.WINDOW_WIDTH,GameStarter.WINDOW_HEIGHT,0,1,-1);
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+    public EntityHandler() {
+
     }
 
     public void draw(int delta, List<SquareEntity> squareEntities) {

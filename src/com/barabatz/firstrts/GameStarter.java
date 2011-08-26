@@ -2,11 +2,12 @@ package com.barabatz.firstrts;
 
 import com.barabatz.firstrts.input.InputHandler;
 import com.barabatz.firstrts.texture.SquareEntity;
-import com.barabatz.firstrts.texture.TextureHandler;
+import com.barabatz.firstrts.texture.EntityHandler;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class GameStarter {
     public static int WINDOW_HEIGHT = 512;
 
     private InputHandler inputHandler;
-    private TextureHandler textureHandler;
+    private EntityHandler entityHandler;
     List<SquareEntity> squareEntities;
     
     /** time at last frame */
@@ -53,7 +54,7 @@ public class GameStarter {
 
     private void update(int delta){
         inputHandler.pollInput();
-        textureHandler.draw(delta, squareEntities);
+        entityHandler.draw(delta, squareEntities);
         updateFPS();
     }
 
@@ -61,6 +62,12 @@ public class GameStarter {
         try{
             Display.setDisplayMode(new DisplayMode(WINDOW_WIDTH, WINDOW_HEIGHT));
             Display.create();
+
+            GL11.glMatrixMode(GL11.GL_PROJECTION);
+            GL11.glLoadIdentity();
+            GL11.glOrtho(0, WINDOW_WIDTH,WINDOW_HEIGHT,0,1,-1);
+            GL11.glMatrixMode(GL11.GL_MODELVIEW);
+
             initHandlers();
         } catch (LWJGLException e) {
             e.printStackTrace();
@@ -69,7 +76,7 @@ public class GameStarter {
     }
 
     private void initHandlers() {
-        textureHandler = new TextureHandler();
+        entityHandler = new EntityHandler();
         SquareEntity squareEntity = new SquareEntity();
         squareEntities = new ArrayList<SquareEntity>();
         squareEntities.add(squareEntity);
