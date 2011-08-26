@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
- * User: bobaffe
  * Date: 26.08.11
  * Time: 00:18
  */

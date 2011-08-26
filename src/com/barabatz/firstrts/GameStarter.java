@@ -12,7 +12,6 @@ import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
- * User: bobaffe
  * Date: 25.08.11
  * Time: 22:02
  */

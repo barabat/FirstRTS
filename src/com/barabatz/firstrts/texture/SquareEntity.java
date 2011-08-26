@@ -1,11 +1,10 @@
 package com.barabatz.firstrts.texture;
 
 import com.barabatz.firstrts.GameStarter;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.*;
 
 /**
  * Created by IntelliJ IDEA.
- * User: bobaffe
  * Date: 26.08.11
  * Time: 01:42
  */
@@ -18,8 +17,9 @@ public class SquareEntity {
         // Clear the screen and the depth buffer
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
+        float B = 0f;
         //Set quad color (R,G,B)
-        GL11.glColor3f(0.5f, 0.8f, 1.0f);
+        GL11.glColor3f(calculateRColor(), calculateGColor(), B);
 
         //Draw a quad
         GL11.glBegin(GL11.GL_QUADS);
@@ -30,6 +30,22 @@ public class SquareEntity {
         GL11.glVertex2f(x+size, y+size);
         GL11.glVertex2f(x, y+size);
         GL11.glEnd();
+    }
+
+    private float calculateRColor(){
+        if (x>0){
+            return (float)x/(GameStarter.WINDOW_WIDTH);
+        } else {
+            return 0f;
+        }
+    }
+
+    private float calculateGColor(){
+        if (y>0){
+            return (float)y/(GameStarter.WINDOW_HEIGHT);
+        } else {
+            return 0f;
+        }
     }
 
     public void moveRight() {
