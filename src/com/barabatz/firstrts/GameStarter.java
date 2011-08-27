@@ -1,8 +1,8 @@
 package com.barabatz.firstrts;
 
 import com.barabatz.firstrts.input.InputHandler;
-import com.barabatz.firstrts.texture.SquareEntity;
 import com.barabatz.firstrts.texture.EntityHandler;
+import com.barabatz.firstrts.texture.SquareEntity;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
@@ -41,16 +41,21 @@ public class GameStarter {
 
     private void start() {
         setupDisplay();
+//        initTextures();
         getDelta(); //call once before loop to initialize lastFrame
         lastFPS = getTime(); //call before loop to initialize fps timer
         while (!Display.isCloseRequested()) {
             int delta = getDelta();
+//            renderTexture();
             update(delta);
             Display.update();
+            Display.sync(100);
         }
 
         Display.destroy();
+        System.exit(0);
     }
+
 
     private void update(int delta){
         inputHandler.pollInput();
@@ -62,6 +67,14 @@ public class GameStarter {
         try{
             Display.setDisplayMode(new DisplayMode(WINDOW_WIDTH, WINDOW_HEIGHT));
             Display.create();
+            Display.setVSyncEnabled(true);
+
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glViewport(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
 
             GL11.glMatrixMode(GL11.GL_PROJECTION);
             GL11.glLoadIdentity();

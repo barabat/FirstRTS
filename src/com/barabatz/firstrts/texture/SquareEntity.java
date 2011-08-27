@@ -2,6 +2,11 @@ package com.barabatz.firstrts.texture;
 
 import com.barabatz.firstrts.GameStarter;
 import org.lwjgl.opengl.*;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
+
+import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,14 +16,15 @@ import org.lwjgl.opengl.*;
 public class SquareEntity {
     private int x = 100;
     private int y = 100;
-    private int size = 50;
+    private int entitySize = 50;
     private float rotation = 0f;
     private int delta;
     private float rotationSpeed = 0f;
 
+
     public void draw(int delta){
         this.delta = delta;
-        setRotation();
+        Texture tankTexture = getTankTexture();
         System.out.println("X: " +x+ " Rot: " + rotation);
         keepOnScreen();
         // Clear the screen and the depth buffer
@@ -26,7 +32,7 @@ public class SquareEntity {
 
         float B = 0f;
         //Set quad color (R,G,B)
-        GL11.glColor3f(calculateRColor(), calculateGColor(), B);
+        //GL11.glColor3f(calculateRColor(), calculateGColor(), B);
 
         //Draw a quad
         GL11.glPushMatrix();
@@ -35,18 +41,33 @@ public class SquareEntity {
         GL11.glTranslatef(-x, -y, 0);
 
         GL11.glBegin(GL11.GL_QUADS);
-        GL11.glVertex2f(x-size,y-size);
-        GL11.glVertex2f(x+size, y-size);
-        GL11.glVertex2f(x+size, y+size);
-        GL11.glVertex2f(x-size, y+size);
+
+            GL11.glTexCoord2f(0,0);
+			GL11.glVertex2f(x-entitySize,y-entitySize);
+			GL11.glTexCoord2f(1,0);
+			GL11.glVertex2f(x+entitySize,y-entitySize);
+			GL11.glTexCoord2f(1,1);
+			GL11.glVertex2f(x+entitySize,y+entitySize);
+			GL11.glTexCoord2f(0,1);
+			GL11.glVertex2f(x-entitySize,y+entitySize);
+//        GL11.glVertex2f(x-entitySize,y-entitySize);
+//        GL11.glVertex2f(x+entitySize, y-entitySize);
+//        GL11.glVertex2f(x+entitySize, y+entitySize);
+//        GL11.glVertex2f(x-entitySize, y+entitySize);
 
         GL11.glEnd();
         GL11.glPopMatrix();
     }
 
-    private void setRotation() {
-        rotation += rotationSpeed * delta;
+    private Texture getTankTexture() {
+        try{
+            return TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/simple_tank.png"));
+        } catch (IOException iox) {
+            iox.printStackTrace();
+        }
+        return null;
     }
+
 
     private float calculateRColor(){
         if (x>0){
@@ -100,7 +121,8 @@ public class SquareEntity {
     }
 
     public void setItemInMiddle() {
-        x= GameStarter.WINDOW_WIDTH/2 - size/2;
-        y= GameStarter.WINDOW_HEIGHT/2 - size/2;
+        x= GameStarter.WINDOW_WIDTH/2 - entitySize /2;
+        y= GameStarter.WINDOW_HEIGHT/2 - entitySize /2;
+        rotation = 0f;
     }
 }
