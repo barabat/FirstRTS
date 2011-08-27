@@ -1,5 +1,6 @@
 package com.barabatz.firstrts.input;
 
+import com.barabatz.firstrts.GameStarter;
 import com.barabatz.firstrts.texture.SquareEntity;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -44,6 +45,9 @@ public class InputHandler {
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_E)){
             squareEntity.rotateRight();
+        }
+        if (Mouse.isButtonDown(1)){
+            squareEntity.moveTo(Mouse.getX(), GameStarter.WINDOW_HEIGHT-Mouse.getY());
         }
     }
 

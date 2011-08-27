@@ -19,16 +19,21 @@ public class SquareEntity {
     private int entitySize = 50;
     private float rotation = 0f;
     private int delta;
+    private String entityName;
     private float rotationSpeed = 0f;
+    private int entitySpeed = 1;
+    private int newX = 0;
+    private int newY = 0;
+    boolean targetReached = true;
 
 
     public void draw(int delta){
         this.delta = delta;
         Texture tankTexture = getTankTexture();
-        System.out.println("X: " +x+ " Rot: " + rotation);
+        entityName = tankTexture.toString();
+        moveEntity();
         keepOnScreen();
         // Clear the screen and the depth buffer
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
         float B = 0f;
         //Set quad color (R,G,B)
@@ -99,6 +104,25 @@ public class SquareEntity {
 
     public void moveDown() {
         y++;
+    }
+
+    public void moveTo(int newX, int newY) {
+        System.out.println("Moving " + entityName + " to " +x+ "," +y);
+        this.newX = newX;
+        this.newY = newY;
+        targetReached = false;
+    }
+
+    private void moveEntity(){
+        if (!targetReached){
+            if(x<newX) x++;
+            if(x>newX) x--;
+            if(y<newY) y++;
+            if(y>newY) y--;
+            if(x==newX && y==newY){
+                targetReached=true;
+            }
+        }
     }
 
     public void rotateLeft() {

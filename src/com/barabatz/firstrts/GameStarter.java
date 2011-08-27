@@ -8,7 +8,12 @@ import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +38,7 @@ public class GameStarter {
     /** last fps time */
     long lastFPS;
 
+    Texture backgroundTexture;
 
 
     public GameStarter(){
@@ -41,11 +47,14 @@ public class GameStarter {
 
     private void start() {
         setupDisplay();
-//        initTextures();
+        initBackgroundTexture();
+
         getDelta(); //call once before loop to initialize lastFrame
         lastFPS = getTime(); //call before loop to initialize fps timer
         while (!Display.isCloseRequested()) {
             int delta = getDelta();
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+            renderBackground();
 //            renderTexture();
             update(delta);
             Display.update();
@@ -54,6 +63,30 @@ public class GameStarter {
 
         Display.destroy();
         System.exit(0);
+    }
+
+    private void initBackgroundTexture() {
+        try{
+            backgroundTexture = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/map1.png"));
+        }catch (IOException iox){
+            iox.printStackTrace();
+        }
+    }
+
+    private void renderBackground() {
+        Color.white.bind();
+		backgroundTexture.bind(); // or GL11.glBind(texture.getTextureID());
+
+		GL11.glBegin(GL11.GL_QUADS);
+			GL11.glTexCoord2f(0,0);
+			GL11.glVertex2f(0,0);
+			GL11.glTexCoord2f(1,0);
+			GL11.glVertex2f(backgroundTexture.getTextureWidth(),0);
+			GL11.glTexCoord2f(1,1);
+			GL11.glVertex2f(backgroundTexture.getTextureWidth(),backgroundTexture.getTextureHeight());
+			GL11.glTexCoord2f(0,1);
+			GL11.glVertex2f(0,backgroundTexture.getTextureHeight());
+		GL11.glEnd();
     }
 
 
