@@ -1,0 +1,5 @@
+This game is created mainly for testing out LWJGL (http://lwjgl.org)
+
+Eventually it might become an rts game, but to begin with it will probably just be me playing around with lwjgl
+
+Read maven_help for maven commands to create binary, or import as maven project in your favourite ide
